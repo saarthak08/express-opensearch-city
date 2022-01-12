@@ -4,10 +4,10 @@ A demo project built with ExpressJS which allows to search city by name and stat
 ## How to start?
 - Clone the project.
 - Run `npm i`.
-- Create a .env file and copy .sample-env contents to it.
+- Create a `.env` file in the root folder of the project and copy `.sample-env` contents to it.
 - Run `docker-compose up`.
 - Then, run `npm start`.
-- Done. Hit `http://localhost:3000/api/v1/city/search` with query parameters name or state or both.
+- Done. Hit `http://localhost:3000/api/v1/city/search` with query parameters `name` or `state` or both.
 
 ## Note:
 - Data is seeded by cities.json file in resource folder.
