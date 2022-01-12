@@ -1,23 +1,32 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {NextFunction, Request, Response, Express} from 'express';
+import {NextFunction, Request, Response} from 'express';
 
-const errorHandler = function (app: Express) {
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    const error = new Error(`Not Found - ${req.originalUrl}`);
-    res.status(404);
-    next(error);
-  });
+export function NotFoundExceptionHandler(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  return res.status(404).send('Not Found');
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    const statusCode =
-      (res.statusCode && (res.statusCode === 200 ? 500 : res.statusCode)) ||
-      500;
-    res.status(statusCode);
-    return res.send({
-      error: err.message,
-    });
-  });
-};
+function getErrorCode(err: any) {
+  if (err.code && err.code >= 100 && err.code <= 599) {
+    return err.code;
+  }
+  if (err.status) {
+    return err.status;
+  }
+  return 500;
+}
 
-export default errorHandler;
+export function GenericExceptionHandler(
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  console.log(err);
+  const errCode = getErrorCode(err);
+  return res.status(errCode).send('Internal Server Error');
+}

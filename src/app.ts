@@ -1,8 +1,12 @@
 import express = require('express');
-import errorHandler from './utils/error-handling';
-const asyncify = require('express-asyncify');
+require('express-async-errors');
+import CityOsService from './services/city-os-service';
+import {
+  GenericExceptionHandler,
+  NotFoundExceptionHandler,
+} from './utils/error-handling';
 
-const app = asyncify(express());
+const app = express();
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -12,10 +16,14 @@ app.use(
 
 const port = process.env.PORT || 3000;
 
-app.use('/api/v1', require('./routes'));
-
 app.listen(port, () => {
   console.log(`Server started on port:${port}!`);
 });
 
-errorHandler(app);
+app.use('/api/v1', require('./routes'));
+
+const cityOsService = new CityOsService();
+cityOsService.initIndex();
+
+app.use(NotFoundExceptionHandler);
+app.use(GenericExceptionHandler);

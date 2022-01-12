@@ -7,8 +7,8 @@
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
-    "dev": "nodemon src/app.ts",
-    "start": "rm -rf build && npm run compile && node build/src/app.js",
+    "dev": "nodemon -r dotenv/config src/app.ts",
+    "start": "rm -rf build && npm run compile && node -r dotenv/config build/src/app.js",
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
@@ -29,7 +29,7 @@
     "@opensearch-project/opensearch": "^1.0.2",
     "dotenv": "^11.0.0",
     "express": "^4.17.2",
-    "express-asyncify": "^1.0.1"
+    "express-async-errors": "^3.1.1"
   },
   "description": ""
 }
