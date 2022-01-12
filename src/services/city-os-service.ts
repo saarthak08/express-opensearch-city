@@ -54,9 +54,26 @@ export default class CityOsService {
     });
   }
 
-  async searchCity(name?: string, state?: string) {
+  async searchCity(name: string, state: string) {
+    const res = await osClient.search({
+      index: this.indexName,
+      body: this.buildQuery(name, state),
+    });
+    if (res.statusCode === 200) {
+      const response = res.body;
+      const cities: Array<any> = [];
+      response.hits.hits.forEach((element: any) => {
+        cities.push(element._source);
+      });
+      return Promise.resolve(cities);
+    } else {
+      throw new Error(res.toString());
+    }
+  }
+
+  private buildQuery(name: string, state: string) {
     const must = [];
-    if (name) {
+    if (name.length !== 0) {
       must.push({
         match_phrase_prefix: {
           name: {
@@ -66,7 +83,7 @@ export default class CityOsService {
         },
       });
     }
-    if (state) {
+    if (state.length !== 0) {
       must.push({
         match_phrase_prefix: {
           state: {
@@ -83,11 +100,6 @@ export default class CityOsService {
         },
       },
     };
-    const res = await osClient.search({index: this.indexName, body: query});
-    if (res.statusCode === 200) {
-      return Promise.resolve(res.body);
-    } else {
-      throw new Error(res.toString());
-    }
+    return query;
   }
 }
