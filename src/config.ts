@@ -1,5 +1,12 @@
 const {Client} = require('@opensearch-project/opensearch');
 
-module.exports.client = new Client({
-  node: process.env.OS_SERVICE_URI,
+const protocol = process.env.OS_PROTOCOL;
+const auth = process.env.OS_AUTH;
+const host = process.env.OS_HOST;
+const port = process.env.OS_PORT;
+
+const client = new Client({
+  node: protocol + '://' + auth + '@' + host + ':' + port,
 });
+
+export default client;

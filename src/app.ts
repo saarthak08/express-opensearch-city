@@ -3,10 +3,10 @@ import express = require('express');
 
 const app: Application = express();
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.get('/toto', (req: Request, res: Response) => {
-  res.send('Hello toto');
+app.get('/test', (req: Request, res: Response) => {
+  res.send('Hello! Server is up and running');
 });
 
 app.listen(port, () => {
